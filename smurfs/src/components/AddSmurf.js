@@ -6,12 +6,14 @@ const AddSmurf = () => {
 
     const { state, dispatch } = useContext(SmurfsContext);
 
-    const [newSmurf, setNewSmurf] = useState({
+    const initialState = {
         name: '',
         age: '',
         height: '',
         id: -1
-    });
+    };
+
+    const [newSmurf, setNewSmurf] = useState(initialState);
 
     const handleChange = e => {
         setNewSmurf({
@@ -21,7 +23,7 @@ const AddSmurf = () => {
     }
 
     const getUniqueId = () => {
-        return state.smurfs
+        return [ ...state.smurfs]
             .sort((a, b) => a.id - b.id)
             .reverse()[0].id + 1;
     };
@@ -35,6 +37,10 @@ const AddSmurf = () => {
         })
         .then(res => {
             dispatch({type: 'ADD_SMURF', payload: { ...newSmurf, id: newId }});
+            setNewSmurf(initialState);
+        })
+        .catch(err => {
+            dispatch({ type: 'FETCH_ERROR', payload: err });
         });
     };
 
