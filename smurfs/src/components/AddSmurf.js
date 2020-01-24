@@ -37,33 +37,38 @@ const AddSmurf = () => {
     const handleSubmit = e => {
         e.preventDefault();
 
-        const api = 'http://localhost:3333/smurfs';
+        if(newSmurf.name.length && newSmurf.age.length && newSmurf.height.length) {
+            const api = 'http://localhost:3333/smurfs';
 
-        const dispatchError = err => dispatch({ type: 'FETCH_ERROR', payload: err });
-        
-        if(newSmurf.id === -1) {
-            // new smurf
-            const newId = getUniqueId();
-            axios.post(api, {
-                ...newSmurf,
-                id: newId
-            })
-            .then(res => {
-                dispatch({type: 'ADD_SMURF', payload: { ...newSmurf, id: newId }});
-                setNewSmurf(initialState);
-            })
-            .catch(err => {
-                dispatchError(err.message);
-            });
-        }
-        else {
-            // existing smurf
-            axios.put(`${api}/${newSmurf.id}`, newSmurf)
+            const dispatchError = err => dispatch({ type: 'FETCH_ERROR', payload: err });
+            
+            if(newSmurf.id === -1) {
+                // new smurf
+                const newId = getUniqueId();
+                axios.post(api, {
+                    ...newSmurf,
+                    id: newId
+                })
                 .then(res => {
-                    dispatch({ type: 'UPDATE_SMURF', payload: newSmurf });
+                    dispatch({type: 'ADD_SMURF', payload: { ...newSmurf, id: newId }});
                     setNewSmurf(initialState);
                 })
-                .catch(err => dispatchError(err.message));
+                .catch(err => {
+                    dispatchError(err.message);
+                });
+            }
+            else {
+                // existing smurf
+                axios.put(`${api}/${newSmurf.id}`, newSmurf)
+                    .then(res => {
+                        dispatch({ type: 'UPDATE_SMURF', payload: newSmurf });
+                        setNewSmurf(initialState);
+                    })
+                    .catch(err => dispatchError(err.message));
+            }
+        }
+        else {
+            window.alert('Ya smurf you! All fields are required');
         }
     };
 
