@@ -2,6 +2,8 @@ import React, { useContext, useEffect } from 'react';
 import { SmurfsContext } from '../contexts/SmurfsContext';
 import axios from 'axios';
 
+import Smurf from './Smurf';
+
 const SmurfList = () => {
 
     const { state, dispatch } = useContext(SmurfsContext);
@@ -14,7 +16,9 @@ const SmurfList = () => {
 
     return (
         <div className="smurf-list">
-            {JSON.stringify(state)}
+            {state.smurfs.map(smurf => (
+                <Smurf key={smurf.id} smurf={smurf} />
+            ))}
         </div>
     );
 };
