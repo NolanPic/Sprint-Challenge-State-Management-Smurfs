@@ -29,7 +29,12 @@ const reducer = (state, action) => {
                     }
                     return smurf;
                 })
-            }
+            };
+        case 'DELETE_SMURF':
+            return {
+                ...state,
+                smurfs: state.smurfs.filter(smurf => smurf.id !== action.payload)
+            };
         default:
             return state;
     }
