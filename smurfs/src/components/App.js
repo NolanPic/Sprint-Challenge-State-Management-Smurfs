@@ -18,7 +18,7 @@ const App = () => {
   return (
     <div className="App">
       <SmurfsContext.Provider value={{ state, dispatch }}>
-        <h1>SMURFS! 2.0 W/ Redux</h1>
+        <h1>SMURFS! 2.0 W/ Context</h1>
         <AddSmurf />
         <SmurfList />
       </SmurfsContext.Provider>
