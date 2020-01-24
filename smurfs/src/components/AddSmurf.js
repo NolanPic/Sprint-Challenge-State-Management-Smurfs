@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { SmurfsContext } from '../contexts/SmurfsContext';
 import axios from 'axios';
 
@@ -15,6 +15,12 @@ const AddSmurf = () => {
 
     const [newSmurf, setNewSmurf] = useState(initialState);
 
+    useEffect(() => {
+        if(state.editingSmurf) {
+            setNewSmurf(state.editingSmurf);
+        }
+    }, [state.editingSmurf]);
+
     const handleChange = e => {
         setNewSmurf({
             ...newSmurf,
@@ -30,18 +36,35 @@ const AddSmurf = () => {
 
     const handleSubmit = e => {
         e.preventDefault();
-        const newId = getUniqueId();
-        axios.post('http://localhost:3333/smurfs', {
-            ...newSmurf,
-            id: newId
-        })
-        .then(res => {
-            dispatch({type: 'ADD_SMURF', payload: { ...newSmurf, id: newId }});
-            setNewSmurf(initialState);
-        })
-        .catch(err => {
-            dispatch({ type: 'FETCH_ERROR', payload: err });
-        });
+
+        const api = 'http://localhost:3333/smurfs';
+
+        const dispatchError = err => dispatch({ type: 'FETCH_ERROR', payload: err });
+        
+        if(newSmurf.id === -1) {
+            // new smurf
+            const newId = getUniqueId();
+            axios.post(api, {
+                ...newSmurf,
+                id: newId
+            })
+            .then(res => {
+                dispatch({type: 'ADD_SMURF', payload: { ...newSmurf, id: newId }});
+                setNewSmurf(initialState);
+            })
+            .catch(err => {
+                dispatchError(err.message);
+            });
+        }
+        else {
+            // existing smurf
+            axios.put(`${api}/${newSmurf.id}`, newSmurf)
+                .then(res => {
+                    dispatch({ type: 'UPDATE_SMURF', payload: newSmurf });
+                    setNewSmurf(initialState);
+                })
+                .catch(err => dispatchError(err.message));
+        }
     };
 
     return (
@@ -66,6 +89,11 @@ const AddSmurf = () => {
                 placeholder="Height"
                 value={newSmurf.height}
                 onChange={handleChange}
+            />
+            <input
+                type="hidden"
+                name="id"
+                value={newSmurf.id}
             />
             <button type="submit">Submit</button>
         </form> 

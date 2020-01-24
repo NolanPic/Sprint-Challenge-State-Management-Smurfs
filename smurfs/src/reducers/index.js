@@ -15,6 +15,21 @@ const reducer = (state, action) => {
                 ...state,
                 smurfs: [...state.smurfs, action.payload]
             }
+        case 'EDIT_SMURF':
+            return {
+                ...state,
+                editingSmurf: action.payload
+            };
+        case 'UPDATE_SMURF':
+            return {
+                ...state,
+                smurfs: state.smurfs.map(smurf => {
+                    if(smurf.id === action.payload.id) {
+                        return action.payload;
+                    }
+                    return smurf;
+                })
+            }
         default:
             return state;
     }

@@ -10,6 +10,7 @@ const App = () => {
 
   const [state, dispatch] = useReducer(reducer, {
     smurfs: [],
+    editingSmurf: null,
     isLoading: false,
     error: null
   });
