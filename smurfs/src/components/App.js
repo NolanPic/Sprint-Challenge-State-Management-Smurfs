@@ -1,13 +1,20 @@
 import React, { Component } from "react";
 import "./App.css";
+import { SmurfsContext } from '../contexts/SmurfsContext';
 class App extends Component {
+
+  state = {
+    smurfs: [],
+    isLoading: false,
+    error: null
+  };
+
   render() {
     return (
       <div className="App">
-        <h1>SMURFS! 2.0 W/ Redux</h1>
-        <div>Welcome to your state management version of Smurfs!</div>
-        <div>Start inside of your `src/index.js` file!</div>
-        <div>Have fun!</div>
+        <SmurfsContext.Provider value={this.state}>
+          <h1>SMURFS! 2.0 W/ Redux</h1>
+        </SmurfsContext.Provider>
       </div>
     );
   }
