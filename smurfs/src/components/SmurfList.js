@@ -19,6 +19,7 @@ const SmurfList = () => {
             {state.smurfs.map(smurf => (
                 <Smurf key={smurf.id} smurf={smurf} />
             ))}
+            {state.error && (<p className="error">Something went wrong</p>)}
         </div>
     );
 };

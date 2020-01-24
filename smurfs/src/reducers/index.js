@@ -10,6 +10,11 @@ const reducer = (state, action) => {
                 ...state,
                 error: action.payload
             }
+        case 'ADD_SMURF':
+            return {
+                ...state,
+                smurfs: [...state.smurfs, action.payload]
+            }
         default:
             return state;
     }
