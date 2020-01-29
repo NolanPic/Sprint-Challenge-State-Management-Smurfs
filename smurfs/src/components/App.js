@@ -1,16 +1,29 @@
-import React, { Component } from "react";
+import React, { useReducer } from "react";
+import reducer from '../reducers';
 import "./App.css";
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <h1>SMURFS! 2.0 W/ Redux</h1>
-        <div>Welcome to your state management version of Smurfs!</div>
-        <div>Start inside of your `src/index.js` file!</div>
-        <div>Have fun!</div>
-      </div>
-    );
-  }
-}
+import { SmurfsContext } from '../contexts/SmurfsContext';
+
+import AddSmurf from '../components/AddSmurf';
+import SmurfList from '../components/SmurfList';
+
+const App = () => {
+
+  const [state, dispatch] = useReducer(reducer, {
+    smurfs: [],
+    editingSmurf: null,
+    isLoading: false,
+    error: null
+  });
+  
+  return (
+    <div className="App">
+      <SmurfsContext.Provider value={{ state, dispatch }}>
+        <h1>SMURFS! 2.0 W/ Context</h1>
+        <AddSmurf />
+        <SmurfList />
+      </SmurfsContext.Provider>
+    </div>
+  );
+};
 
 export default App;
